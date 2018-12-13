@@ -1,4 +1,4 @@
-package name.songhui.concurr.learning.Exception;
+package name.songhui.concurr.learning.exception;
 
 public class MyException extends RuntimeException {
     public MyException(String msg)

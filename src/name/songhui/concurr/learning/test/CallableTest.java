@@ -1,4 +1,4 @@
-package name.songhui.concurr.learning.callable;
+package name.songhui.concurr.learning.test;
 
 import name.songhui.concurr.learning.bean.Person;
 import name.songhui.concurr.learning.thread.Callee;

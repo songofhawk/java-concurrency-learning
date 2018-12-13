@@ -1,6 +1,6 @@
 package name.songhui.concurr.learning.thread;
 
-import name.songhui.concurr.learning.Exception.MyException;
+import name.songhui.concurr.learning.exception.MyException;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
