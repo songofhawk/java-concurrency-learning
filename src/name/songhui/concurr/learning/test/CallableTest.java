@@ -3,9 +3,9 @@ package name.songhui.concurr.learning.test;
 import name.songhui.concurr.learning.bean.Person;
 import name.songhui.concurr.learning.thread.Callee;
 import name.songhui.concurr.learning.thread.CalleeWithExp;
+import name.songhui.concurr.learning.util.ConcurUtil;
 import org.junit.Test;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 public class CallableTest {
@@ -29,7 +29,7 @@ public class CallableTest {
             }
         }
 
-        Person result = getResultForFuture(ft);
+        Person result = ConcurUtil.getResultForFuture(ft);
 
         System.out.println("main thread get result: "+result.toString());
     }
@@ -53,7 +53,7 @@ public class CallableTest {
 
         System.out.println("ft.isDone: "+ft.isDone());
 
-        Person result = getResultForFuture(ft);
+        Person result = ConcurUtil.getResultForFuture(ft);
         System.out.println("main thread get result: "+result.toString());
     }
 
@@ -117,20 +117,6 @@ public class CallableTest {
 
         System.out.println("ft.isDone: "+ft.isDone());
 
-    }
-
-
-
-    private Person getResultForFuture(FutureTask<Person> ft) {
-        try {
-            return ft.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return null;
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
 

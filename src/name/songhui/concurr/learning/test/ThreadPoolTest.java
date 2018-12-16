@@ -2,8 +2,11 @@ package name.songhui.concurr.learning.test;
 
 import name.songhui.concurr.learning.bean.Person;
 import name.songhui.concurr.learning.thread.Callee;
+import name.songhui.concurr.learning.util.ConcurUtil;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 
 public class ThreadPoolTest {
@@ -21,18 +24,10 @@ public class ThreadPoolTest {
         Callable<Person> worker3 = new Callee(3);
         Future ft3 = pool.submit(worker3);
 
-        System.out.println("准备通知线程池shutdown...");
-        //shutdown只是不能再提交新的任务,已经进入队列和正在进行的任务不受影响
-        pool.shutdown();
-        System.out.println("已通知线程池shutdown");
-        try {
-            //在一定时间内,等在线程池中的任务全部结束
-            pool.awaitTermination(2L, TimeUnit.SECONDS);
-            System.out.println("线程池完全结束");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        ConcurUtil.shutdownPool(pool);
+        System.out.println("Person1:"+ConcurUtil.getResultForFuture(ft1));
+        System.out.println("Person2:"+ConcurUtil.getResultForFuture(ft2));
+        System.out.println("Person3:"+ConcurUtil.getResultForFuture(ft3));
     }
 
 
@@ -47,26 +42,23 @@ public class ThreadPoolTest {
          *
          */
         ExecutorService pool = new ThreadPoolExecutor(2, 3, 1, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>() );
+        List<Future<Person>> futureList = new ArrayList<Future<Person>>();
 
         for (int i=0; i<10; i++){
             Callable<Person> worker = new Callee(i+1);
             Future ft = pool.submit(worker);
+            futureList.add(ft);
         }
 
-        System.out.println("准备通知线程池shutdown...");
-        //shutdown只是不能再提交新的任务,已经进入队列和正在进行的任务不受影响
-        pool.shutdown();
-        System.out.println("已通知线程池shutdown");
-        try {
-            //在一定时间内,等在线程池中的任务全部结束
-            if (pool.awaitTermination(30, TimeUnit.SECONDS)){
-                System.out.println("线程池完全结束");
-            }else{
-                System.out.println("等待线程池结束超时...");
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        ConcurUtil.shutdownPool(pool);
+
+        for (int i=0; i<futureList.size(); i++){
+            Future<Person> future = futureList.get(i);
+            System.out.println("Person"+(i+1)+":"+ConcurUtil.getResultForFuture(future));
         }
 
     }
+
+
 }
