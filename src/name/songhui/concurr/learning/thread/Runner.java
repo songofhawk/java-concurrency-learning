@@ -8,6 +8,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Runner implements Runnable {
     AtomicInteger seq = new AtomicInteger(0);
 
+    ThreadLocal<Integer> localInt = new ThreadLocal<>();
+
     /**
      * run方法不能抛出受检查的异常,必须用try catch块包围
      */

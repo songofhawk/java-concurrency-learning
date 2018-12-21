@@ -22,7 +22,7 @@ public class Callee implements Callable {
     }
 
     /**
-     * call接口可以抛出受检查的异常
+     * call接口可以抛出受检查的异常EE
      * @return
      * @throws InterruptedException
      */
@@ -33,6 +33,8 @@ public class Callee implements Callable {
         Thread.sleep(1000);
         return  p;
     }
+
+
 }
 
 

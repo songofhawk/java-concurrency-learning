@@ -6,17 +6,7 @@ import java.util.concurrent.*;
 
 public class ConcurUtil {
 
-    public static <T> T getResultForFuture(FutureTask<T> ft) {
-        try {
-            return ft.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return null;
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
 
     public static <T> T getResultForFuture(Future<T> ft) {
         try {
