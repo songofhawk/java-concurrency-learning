@@ -27,7 +27,7 @@ public class StreamTest {
 
 
     @Test
-    public void TestFlatMap() {
+    public void testFlatMap() {
         Stream<List<Integer>> inputStream = Stream.of(
                 Arrays.asList(1),
                 Arrays.asList(2, 3),
@@ -46,7 +46,6 @@ public class StreamTest {
         System.out.println(str);
     }
 
-
     @Test
     public void testReduceSimple() {
         Stream<String> stream = Stream.of("a", "b", "c");
@@ -64,16 +63,30 @@ public class StreamTest {
     @Test
     public void testParallelReduce() {
         Stream<String> stream = Stream.of("a", "b", "c");
-        //这里不知道为什么,并行以后,拼接的字符串会远远超过3个字母——貌似是sb这个变量被多线程共享了，又没有加锁，所以stream的并发也不见得是安全的
+        //并行以后,拼接的字符串会远远超过3个字母——貌似是sb这个变量被多线程共享了，又没有加锁，所以stream的并发也不见得是安全的
         String str = stream.parallel().reduce(new StringBuilder(), (sb, s) -> sb.append(s).append(','), (sb, s) -> sb.append(s).append(";  ")).toString();
         System.out.println(str);
     }
 
     @Test
-    public void testParallelReduceSimple() {
+    public void testParallelReduceWithLock() {
         Stream<String> stream = Stream.of("a", "b", "c");
+        //即使加锁也无法保证并行不出现问题——目前还没想通是为什么， 那么还是不要在线程间共享变量了
+        String str = stream.parallel().reduce(new StringBuilder(), (sb, s) -> {
+                synchronized (sb) {return sb.append(s).append(',');}
+            }, (sb, s) -> {
+                synchronized (sb) {return sb.append(s).append(";   ");}
+            }).toString();
+        System.out.println(str);
+    }
+
+    @Test
+    public void testParallelReduceSimple() {
+        Stream<String> stream = Stream.of("a", "b", "c","d","e","f","g");
         String str = stream.parallel().reduce((a, b) -> a + "," + b).get();
         System.out.println(str);
     }
+
+
 
 }
